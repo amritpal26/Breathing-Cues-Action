@@ -47,21 +47,15 @@ class SettingViewController: UITableViewController{
     }
     
     @IBAction func soundChanged(_ sender: UISwitch) {
-        print("Sound Changed:")
         let value = sender.isOn
-        print(value)
         userDefaults.set(value, forKey: SOUND_PREF)
     }
     @IBAction func vibrationChanged(_ sender: UISwitch) {
-        print("Vibration Changed:")
         let value = sender.isOn
-        print(value)
         userDefaults.set(value, forKey: VIBRATION_PREF)
     }
     @IBAction func reminder_1Changed(_ sender: UISwitch) {
-        print("Reminder 1 Changed:")
         let value = sender.isOn
-        print(value)
         userDefaults.set(value, forKey: REMINDER1_PREF)
         
         if value{
@@ -72,9 +66,7 @@ class SettingViewController: UITableViewController{
     }
     
     @IBAction func reminder_2Changed(_ sender: UISwitch) {
-        print("Reminder 2 Changed:")
         let value = sender.isOn
-        print(value)
         userDefaults.set(value, forKey: REMINDER2_PREF)
         
         if value{
@@ -89,11 +81,11 @@ class SettingViewController: UITableViewController{
             let name = userDefaults.string(forKey: USER_NAME_PREF)
             usernameSummary.text = name
             let indexPath = IndexPath(row: 0, section: 0)
-            var cell = tableView(tableViewOutlet, cellForRowAt: indexPath)
+            let cell = tableView(tableViewOutlet, cellForRowAt: indexPath)
             cell.isUserInteractionEnabled = false
             cell.selectionStyle = UITableViewCellSelectionStyle.gray
         }else{
-            usernameSummary.text = "user name"
+            usernameSummary.text = "default"
         }
     }
     
@@ -160,10 +152,8 @@ class SettingViewController: UITableViewController{
     }
     
     func triggerNotification(reminder: Int){
-        
         let content = UNMutableNotificationContent()
         content.title = "Reminder"
-//        content.subtitle = "Remember to do the relaxing exercise"
         content.body = "Time to do the relaxing exercise"
         content.badge = 1
         

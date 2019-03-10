@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		B252060D043D3BF8588D2582 /* Pods_Breathing_Cues_Action.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E29297ADB68C71B302336232 /* Pods_Breathing_Cues_Action.framework */; };
+		F0645CB0215AA7D3003C72DC /* beep.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F0645CAF215AA7D3003C72DC /* beep.mp3 */; };
 		F08142DF2151AF1F007785E1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F08142DE2151AF1E007785E1 /* GoogleService-Info.plist */; };
 		F08142E12151B66B007785E1 /* final.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F08142E02151B66B007785E1 /* final.mp3 */; };
-		F0E293562144E2F6006989FF /* beep.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F0E293552144E2F6006989FF /* beep.mp3 */; };
 		F0E293582144E300006989FF /* end_beep.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F0E293572144E300006989FF /* end_beep.mp3 */; };
 		F0E2935A2144E3F4006989FF /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E293592144E3F4006989FF /* SettingViewController.swift */; };
 		F0FEC2762143398000B605FE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FEC2752143398000B605FE /* AppDelegate.swift */; };
@@ -25,9 +25,9 @@
 		317A1D42AA7407BAB503D0A1 /* Pods-Breathing Cues Action.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Breathing Cues Action.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Breathing Cues Action/Pods-Breathing Cues Action.debug.xcconfig"; sourceTree = "<group>"; };
 		AE9B037B253D30CC94DC9687 /* Pods-Breathing Cues Action.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Breathing Cues Action.release.xcconfig"; path = "Pods/Target Support Files/Pods-Breathing Cues Action/Pods-Breathing Cues Action.release.xcconfig"; sourceTree = "<group>"; };
 		E29297ADB68C71B302336232 /* Pods_Breathing_Cues_Action.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Breathing_Cues_Action.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0645CAF215AA7D3003C72DC /* beep.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = beep.mp3; path = ../../../../beep.mp3; sourceTree = "<group>"; };
 		F08142DE2151AF1E007785E1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F08142E02151B66B007785E1 /* final.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = final.mp3; sourceTree = "<group>"; };
-		F0E293552144E2F6006989FF /* beep.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = beep.mp3; sourceTree = "<group>"; };
 		F0E293572144E300006989FF /* end_beep.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = end_beep.mp3; sourceTree = "<group>"; };
 		F0E293592144E3F4006989FF /* SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		F0FEC2722143398000B605FE /* Breathing Cues Action.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Breathing Cues Action.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -72,7 +72,7 @@
 		F0E293542144E2D8006989FF /* sound */ = {
 			isa = PBXGroup;
 			children = (
-				F0E293552144E2F6006989FF /* beep.mp3 */,
+				F0645CAF215AA7D3003C72DC /* beep.mp3 */,
 				F08142E02151B66B007785E1 /* final.mp3 */,
 				F0E293572144E300006989FF /* end_beep.mp3 */,
 			);
@@ -176,7 +176,7 @@
 			files = (
 				F0FEC2802143398600B605FE /* LaunchScreen.storyboard in Resources */,
 				F08142E12151B66B007785E1 /* final.mp3 in Resources */,
-				F0E293562144E2F6006989FF /* beep.mp3 in Resources */,
+				F0645CB0215AA7D3003C72DC /* beep.mp3 in Resources */,
 				F0FEC27D2143398600B605FE /* Assets.xcassets in Resources */,
 				F0FEC2882144DA2900B605FE /* pickerData.plist in Resources */,
 				F0E293582144E300006989FF /* end_beep.mp3 in Resources */,

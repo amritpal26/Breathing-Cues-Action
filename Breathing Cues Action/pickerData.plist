@@ -1,74 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<!--
-   pickerData.plist
-   Breathing Cues Action
-
-   Created by Amritpal Singh on 2018-09-08.
-   Copyright (c) 2018 Amritpal Singh. All rights reserved.
--->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-    <dict>
-        <key>TimerSeconds</key>
-        <array>
-            <integer>15</integer>
-            <integer>30</integer>
-            <integer>45</integer>
-            <integer>60</integer>
-            <integer>75</integer>
-            <integer>90</integer>
-            <integer>105</integer>
-            <integer>120</integer>
-            <integer>135</integer>
-            <integer>150</integer>
-            <integer>165</integer>
-            <integer>180</integer>
-            <integer>195</integer>
-            <integer>210</integer>
-            <integer>225</integer>
-            <integer>240</integer>
-            <integer>255</integer>
-            <integer>270</integer>
-            <integer>285</integer>
-            <integer>300</integer>
-        </array>
-        <key>SecondListContinous</key>
-        <array>
-            <real>0.5</real>
-            <integer>1</integer>
-            <real>1.5</real>
-            <real>2</real>
-            <real>2.5</real>
-            <integer>3</integer>
-            <real>3.5</real>
-            <integer>4</integer>
-            <real>4.5</real>
-            <integer>5</integer>
-            <integer>6</integer>
-            <integer>7</integer>
-            <integer>8</integer>
-            <integer>9</integer>
-            <integer>10</integer>
-        </array>
-        <key>SecondListContinousHold</key>
-        <array>
-            <integer>0</integer>
-            <real>0.5</real>
-            <integer>1</integer>
-            <real>1.5</real>
-            <integer>2</integer>
-            <real>2.5</real>
-            <integer>3</integer>
-            <real>3.5</real>
-            <integer>4</integer>
-            <real>4.5</real>
-            <integer>5</integer>
-            <integer>6</integer>
-            <integer>7</integer>
-            <integer>8</integer>
-            <integer>9</integer>
-            <integer>10</integer>
-        </array>
+<dict>
+	<key>New item</key>
+	<integer>5</integer>
+	<key>SecondListExhale</key>
+    <array>
+        <integer>5</integer>
+        <real>5.5</real>
+        <integer>6</integer>
+        <real>6.5</real>
+        <integer>7</integer>
+        <real>7.5</real>
+        <integer>8</integer>
+    </array>
     
-    </dict>
+	<key>TimerSeconds</key>
+	<array>
+		<integer>15</integer>
+		<integer>30</integer>
+		<integer>45</integer>
+		<integer>60</integer>
+		<integer>75</integer>
+		<integer>90</integer>
+		<integer>105</integer>
+		<integer>120</integer>
+		<integer>135</integer>
+		<integer>150</integer>
+		<integer>165</integer>
+		<integer>180</integer>
+		<integer>195</integer>
+		<integer>210</integer>
+		<integer>225</integer>
+		<integer>240</integer>
+		<integer>255</integer>
+		<integer>270</integer>
+		<integer>285</integer>
+		<integer>300</integer>
+	</array>
+    
+	<key>SecondListInhale</key>
+	<array>
+		<integer>3</integer>
+		<real>3.5</real>
+		<integer>4</integer>
+		<real>4.5</real>
+		<integer>5</integer>
+	</array>
+    
+	<key>SecondListHold</key>
+	<array>
+		<integer>0</integer>
+		<integer>3</integer>
+		<real>3.5</real>
+		<integer>4</integer>
+		<real>4.5</real>
+		<integer>5</integer>
+		<real>5.5</real>
+		<integer>6</integer>
+		<real>6.5</real>
+		<integer>7</integer>
+	</array>
+</dict>
 </plist>

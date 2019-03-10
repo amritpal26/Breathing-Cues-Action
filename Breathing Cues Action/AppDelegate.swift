@@ -21,6 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UNUserNotificationCenter.current().requestAuthorization(options: [.badge, .alert, .sound]) { (didAllow, error) in
         }
         
+        UIApplication.shared.applicationIconBadgeNumber = 0
+        
         return true
     }
 

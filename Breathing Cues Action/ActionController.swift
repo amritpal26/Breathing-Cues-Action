@@ -15,7 +15,7 @@ import Firebase
 class ActionController: UIViewController {
 
     enum BreathingState{
-        case NEW_TIMER, PAUSED, STOPPED, INHALE, EXHALE, HOLD, END_TIMER
+        case NEW_TIMER, PAUSED, INHALE, EXHALE, HOLD, END_TIMER
     }
     
     var ref: DatabaseReference!
@@ -43,14 +43,15 @@ class ActionController: UIViewController {
     let VIBRATION_PREF = "Vibration_Pref"
 
     // Colors for the expandable circle view.
-    let INHALE_COLOR = UIColor(hex: "00bfff")
-    let HOLD_COLOR = UIColor(hex: "ffbf00")
-    let EXHALE_COLOR = UIColor(hex: "bfff00")
+    let INHALE_COLOR = UIColor(hex: "00bfff", alphaValue: 1)
+    let HOLD_COLOR = UIColor(hex: "ffbf00", alphaValue: 1)
+    let EXHALE_COLOR = UIColor(hex: "bfff00", alphaValue: 1)
 
-    // USed to identify pickers.
-    let INHALE_EXHALE_TAG = 1
+    // Used to identify pickers.
+    let INHALE_TAG = 1
     let HOLD_TAG = 2
-    let TIMER_TAG = 3
+    let EXHALE_TAG = 3
+    let TIMER_TAG = 5
 
     // Constants for the IDS pf pickers used to identify the picker for filling the data and setting them up.
     let TIMER_PICKER_ID = 0
@@ -62,7 +63,8 @@ class ActionController: UIViewController {
     // Data colleted from the plist for the picker views.
     var timerSeconds: [float_t] = []
     var holdSeconds: [float_t] = []
-    var actionSeconds: [float_t] = []
+    var inhaleSeconds: [float_t] = []
+    var exhaleSeconds: [float_t] = []
 
     // Variables for holding the values for the picker views.
     var selectedTimerTime: float_t = 15
@@ -118,32 +120,30 @@ class ActionController: UIViewController {
         setupSoundAndVibration()
         
         FirebaseApp.configure()
+        Database.database().isPersistenceEnabled = true
         ref = Database.database().reference()
-
+        
+//       NotificationCenter.default.addObserver(
+//        forName: NSNotification.Name(rawValue: "reminder"),
+//        object: nil,
+//        queue: nil,
+//        using: <#T##(Notification) -> Void#>)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
-        breathingState = BreathingState.STOPPED
-        unlockPickers()
-        stopTimer()
-        actionProgress.backgroundColor = INHALE_COLOR
+        if breathingState != BreathingState.NEW_TIMER{
+            breathingState = BreathingState.PAUSED
+            stopTimer()
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
         isSoundEnabled = userDefaults.bool(forKey: SOUND_PREF)
         isVibrationEnabled = userDefaults.bool(forKey: VIBRATION_PREF)
-        actionProgress.backgroundColor = INHALE_COLOR
-
-        print(isSoundEnabled)
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     @IBAction func inhalePicker(_ sender: UIButton) {
-        setPickers(tag: INHALE_EXHALE_TAG, pickerId: INHALE_PICKER_ID)
+        setPickers(tag: INHALE_TAG, pickerId: INHALE_PICKER_ID)
         resetLabels()
     }
 
@@ -153,7 +153,7 @@ class ActionController: UIViewController {
     }
 
     @IBAction func exhalePicker(_ sender: UIButton) {
-        setPickers(tag: INHALE_EXHALE_TAG, pickerId: EXHALE_PICKER_ID)
+        setPickers(tag: EXHALE_TAG, pickerId: EXHALE_PICKER_ID)
         resetLabels()
     }
 
@@ -167,7 +167,7 @@ class ActionController: UIViewController {
         resetLabels()
     }
     @IBAction func startBtnPressed(_ sender: Any) {
-        if breathingState == BreathingState.NEW_TIMER || breathingState == BreathingState.PAUSED || breathingState == BreathingState.STOPPED{
+        if breathingState == BreathingState.NEW_TIMER || breathingState == BreathingState.PAUSED{
             startTimer()
         }else{
             breathingState = BreathingState.PAUSED
@@ -195,14 +195,23 @@ class ActionController: UIViewController {
                 print(secArray)
             }
         }
-        if (dict.object(forKey: "SecondListContinous") != nil) {
-            if let secArray = dict.object(forKey: "SecondListContinous") as? [float_t] {
-                actionSeconds = secArray
+        
+        if (dict.object(forKey: "SecondListInhale") != nil) {
+            if let secArray = dict.object(forKey: "SecondListInhale") as? [float_t] {
+                inhaleSeconds = secArray
                 print(secArray)
             }
         }
-        if (dict.object(forKey: "SecondListContinousHold") != nil) {
-            if let secArray = dict.object(forKey: "SecondListContinousHold") as? [float_t] {
+        
+        if (dict.object(forKey: "SecondListExhale") != nil) {
+            if let secArray = dict.object(forKey: "SecondListExhale") as? [float_t] {
+                exhaleSeconds = secArray
+                print(secArray)
+            }
+        }
+        
+        if (dict.object(forKey: "SecondListHold") != nil) {
+            if let secArray = dict.object(forKey: "SecondListHold") as? [float_t] {
                 holdSeconds = secArray
                 print(secArray)
             }
@@ -217,19 +226,24 @@ class ActionController: UIViewController {
         let selectedHold2Row = userDefaults.integer(forKey: HOLD_2_PREF)
 
         timerBtn.setTitle(convertToString(totalSeconds: timerSeconds[selectedTimerRow]), for: .normal)
-        inhale.setTitle(convertToString(totalSeconds: actionSeconds[selectedInhaleRow]), for: .normal)
+        inhale.setTitle(convertToString(totalSeconds: inhaleSeconds[selectedInhaleRow]), for: .normal)
         hold1.setTitle(convertToString(totalSeconds: holdSeconds[selectedHold1Row]), for: .normal)
-        exhale.setTitle(convertToString(totalSeconds: actionSeconds[selectedExhaleRow]), for: .normal)
+        exhale.setTitle(convertToString(totalSeconds: exhaleSeconds[selectedExhaleRow]), for: .normal)
         hold2.setTitle(convertToString(totalSeconds: holdSeconds[selectedHold2Row]), for: .normal)
 
         selectedTimerTime = timerSeconds[selectedTimerRow]
-        selectedInhaleTime = actionSeconds[selectedInhaleRow]
+        selectedInhaleTime = inhaleSeconds[selectedInhaleRow]
         selectedHold1Time = holdSeconds[selectedHold1Row]
-        selectedExhaleTime = actionSeconds[selectedExhaleRow]
+        selectedExhaleTime = exhaleSeconds[selectedExhaleRow]
         selectedHold2Time = holdSeconds[selectedHold2Row]
 
         remainingTimerMillis = Int(selectedTimerTime * 10)
         totalTime.isOpaque = false
+        
+        startBtn.layer.cornerRadius = 10
+        startBtn.clipsToBounds = true
+        totalTime.layer.cornerRadius = 10
+        totalTime.clipsToBounds = true
     }
 
     func setupActionProgress(){
@@ -254,7 +268,7 @@ class ActionController: UIViewController {
     }
 
     func startTimer(){
-        if breathingState == BreathingState.PAUSED || breathingState == BreathingState.NEW_TIMER || breathingState == BreathingState.STOPPED{
+        if breathingState == BreathingState.NEW_TIMER{
 
             totalTime.isOpaque = true
             breathingState = BreathingState.NEW_TIMER
@@ -274,14 +288,21 @@ class ActionController: UIViewController {
 
             // Start the timer.
             timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: (#selector(ActionController.timerResponse)), userInfo: nil, repeats: true)
-            lockPickers()
+            
+            if breathingState == BreathingState.NEW_TIMER{
+                lockPickers()
+            }
+        }else if breathingState == BreathingState.PAUSED{
+            timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: (#selector(ActionController.timerResponse)), userInfo: nil, repeats: true)
         }
+        
+        startBtn.backgroundColor = UIColor(hex: "ce7171", alphaValue: 0)
+        totalTime.backgroundColor = UIColor(hex: "a466cc", alphaValue: 0)
     }
 
     @objc func timerResponse(){
         if remainingTimerMillis > 0{
-            print(remainingTimerMillis)
-
+            
             progressView.value = UICircularProgressRing.ProgressValue(millisElapsedTotal)
             currentCycleNumber = millisElapsedTotal / cycleRangeMillis
 
@@ -295,18 +316,16 @@ class ActionController: UIViewController {
                     vibrate(isEnd: false)
                     breathingState = BreathingState.INHALE
                     actionProgress.backgroundColor = INHALE_COLOR
-                    print(breathingState)
                     startBtn.setTitle("Inhale", for: .normal)
+                    setActionMax(max: Int(selectedInhaleTime * 10))
+                    print(breathingState)
                 }
 
-                setActionMax(max: Int(selectedInhaleTime * 10))
                 let inhaleProgressMillis = (millisElapsedTotal - (currentCycleNumber * cycleRangeMillis))
                 let progressSec: float_t = float_t(inhaleProgressMillis / 10)
                 let inhaleTimer = selectedInhaleTime - progressSec
                 totalTime.setTitle(getRemainingTimeString(totalSeconds: inhaleTimer), for: .normal)
                 setActionProgress(progress: inhaleProgressMillis)
-
-
             }else if (millisElapsedTotal - (currentCycleNumber * cycleRangeMillis)) < hold1RangeMillis {
                 if breathingState != BreathingState.HOLD{
                     playSound(isEnd: false)
@@ -330,9 +349,8 @@ class ActionController: UIViewController {
                     actionProgress.backgroundColor = EXHALE_COLOR
                     print(breathingState)
                     startBtn.setTitle("Exhale", for: .normal)
+                    setActionMax(max: Int(selectedExhaleTime * 10))
                 }
-
-                setActionMax(max: Int(selectedExhaleTime * 10))
 
                 let progressMillis = (millisElapsedTotal - (currentCycleNumber * cycleRangeMillis)) - hold1RangeMillis
                 let exhaleNegProgressMillis = (exhaleRangeMillis + (currentCycleNumber * cycleRangeMillis)) - millisElapsedTotal
@@ -380,12 +398,15 @@ class ActionController: UIViewController {
             remainingTimerMillis = 0
             millisElapsedTotal = 0
             playSound(isEnd: true)
-            breathingState = BreathingState.STOPPED
-        }
-        else{
+            breathingState = BreathingState.NEW_TIMER
+            
+            startBtn.backgroundColor = UIColor(hex: "ce7171", alphaValue: 0)
+            totalTime.backgroundColor = UIColor(hex: "a466cc", alphaValue: 0)
+        }else{
             startBtn.setTitle("Continue", for: .normal)
             totalTime.setTitle("Restart", for: .normal)
-            //            progressView.value = 0
+            startBtn.backgroundColor = UIColor(hex: "ce7171", alphaValue: 1)
+            totalTime.backgroundColor = UIColor(hex: "a466cc", alphaValue: 1)
         }
     }
 
@@ -463,8 +484,6 @@ class ActionController: UIViewController {
     }
 
     func resetLabels(){
-//        stopTimer()
-
         totalTime.setTitle("0", for: .normal)
         startBtn.setTitle("Start", for: .normal)
         remainingTimerMillis = 0
@@ -478,20 +497,24 @@ extension ActionController: UIPickerViewDataSource{
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if pickerView.tag == INHALE_EXHALE_TAG{
-            return actionSeconds.count
+        if pickerView.tag == INHALE_TAG{
+            return inhaleSeconds.count
         }else if pickerView.tag == HOLD_TAG{
             return holdSeconds.count
+        }else if pickerView.tag == EXHALE_TAG{
+            return exhaleSeconds.count
         }else{
             return timerSeconds.count
         }
     }
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if pickerView.tag == INHALE_EXHALE_TAG {
-            return convertToString(totalSeconds: actionSeconds[row])
+        if pickerView.tag == INHALE_TAG {
+            return convertToString(totalSeconds: inhaleSeconds[row])
         }else if pickerView.tag == HOLD_TAG{
             return convertToString(totalSeconds: holdSeconds[row])
+        }else if pickerView.tag == EXHALE_TAG{
+             return convertToString(totalSeconds: exhaleSeconds[row])
         }else{
             return convertToString(totalSeconds: timerSeconds[row])
         }
@@ -550,7 +573,7 @@ extension ActionController: UIPickerViewDataSource{
                 self.timerBtn.setTitle(self.convertToString(totalSeconds: self.selectedTimerTime), for: .normal)
                 break
             case self.INHALE_PICKER_ID:
-                self.selectedInhaleTime = self.actionSeconds[self.selectedRow]
+                self.selectedInhaleTime = self.inhaleSeconds[self.selectedRow]
                 self.userDefaults.set(self.selectedRow, forKey: self.INHALE_PREF)
                 self.inhale.setTitle(self.convertToString(totalSeconds: self.selectedInhaleTime), for: .normal)
                 break
@@ -560,7 +583,7 @@ extension ActionController: UIPickerViewDataSource{
                 self.hold1.setTitle(self.convertToString(totalSeconds: self.selectedHold1Time), for: .normal)
                 break
             case self.EXHALE_PICKER_ID:
-                self.selectedExhaleTime = self.actionSeconds[self.selectedRow]
+                self.selectedExhaleTime = self.exhaleSeconds[self.selectedRow]
                 self.userDefaults.set(self.selectedRow, forKey: self.EXHALE_PREF)
                 self.exhale.setTitle(self.convertToString(totalSeconds: self.selectedExhaleTime), for: .normal)
                 break
@@ -616,7 +639,7 @@ extension ActionController{
     func sendDataToDatabase(){
         let date = Date()
         let formatter = DateFormatter()
-        formatter.dateFormat = "ccc MMM dd, yyyy hh:mm:ss"
+        formatter.dateFormat = "ccc MMM dd, yyyy hh:mm:ss a"
         let result = formatter.string(from: date)
         if userDefaults.object(forKey: USER_NAME_PREF) != nil{
             let userName = userDefaults.string(forKey: USER_NAME_PREF)
@@ -628,7 +651,7 @@ extension ActionController{
 }
 
 extension UIColor {
-    convenience init(hex: String) {
+    convenience init(hex: String, alphaValue: CGFloat) {
         let scanner = Scanner(string: hex)
         scanner.scanLocation = 0
 
@@ -643,10 +666,9 @@ extension UIColor {
         self.init(
             red: CGFloat(r) / 0xff,
             green: CGFloat(g) / 0xff,
-            blue: CGFloat(b) / 0xff, alpha: 1
+            blue: CGFloat(b) / 0xff,
+            alpha: alphaValue
         )
     }
-
-
 }
 
